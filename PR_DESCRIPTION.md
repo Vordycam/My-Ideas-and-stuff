@@ -1,23 +1,25 @@
-PR title: refactor(ui): extract assets, modularize JS, add checks and tests
+Refactor: extract assets and modularize JS
 
-Summary:
-- Move inline CSS/JS to organized assets.
-- Modularize JS into ES modules: `feed.js`, `toast.js`, `ui.js` and `main.js` as the entry.
-- Add lightweight sanity & accessibility checks and a small browser test harness.
+This PR refactors the project's single-file UI into a cleaned, maintainable layout
+with extracted assets and basic validation helpers.
 
-Why:
-- Improves editor/tooling behavior (files recognized as CSS/JS)
-- Easier to maintain and extend UI behavior
-- Adds quick checks and tests to reduce regressions
+What changed
+- Extracted inline CSS into `assets/styles.css`.
+- Extracted inline JS into modules under `assets/modules/` and entry `assets/main.js`.
+- Added a cleaned `index.html` referencing the extracted assets.
+- Added lightweight checks and smoke tests under `tools/` and `tests/`.
+- Kept the original `Aegis` file as a redirect to preserve history.
 
-How to validate locally:
-1. Run sanity checks:
-   - python tools/check_html.py
-   - python tools/a11y_check.py
-2. Run browser tests:
-   - python -m http.server 8000
-   - open http://localhost:8000/tests/index.html
+Files of interest
+- `assets/styles.css`, `assets/main.js`, `assets/modules/*`
+- `index.html`
+- `tools/check_html.py`, `tools/a11y_check.py`, `tests/index.html`
+- Patch for review: `tidy/assets-extract-changes.patch`
 
-Notes:
-- This PR does not change behavior beyond small accessibility improvements.
-- Git is required to create the branch/commit; use `tools/apply_patch_locally.ps1` if you prefer a helper.
+Preview
+- Run a local static server and open: `http://localhost:8000/index.html`
+
+Notes
+- Intent: improve maintainability and accessibility; avoid behavioral regressions.
+- Follow-up suggestions: split JS further, add unit tests, wire a CI check for HTML/a11y.
+
