@@ -23,3 +23,10 @@ Notes
 - Intent: improve maintainability and accessibility; avoid behavioral regressions.
 - Follow-up suggestions: split JS further, add unit tests, wire a CI check for HTML/a11y.
 
+PR Checklist
+
+- [ ] Confirm visual parity in a browser (`python -m http.server 8000` then open `/index.html`).
+- [ ] Run `python tools/check_html.py` and `python tools/a11y_check.py` and address any issues.
+- [ ] Verify smoke tests: open `tests/index.html` in a browser.
+- [ ] Ensure CI (if configured) passes on the PR.
+
