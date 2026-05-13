@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, 'tidy/*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Run HTML sanity check
+        run: python tools/check_html.py
+
+      - name: Run accessibility quick check
+        run: python tools/a11y_check.py
+
+      - name: Run unit tests
+        run: pytest -q
