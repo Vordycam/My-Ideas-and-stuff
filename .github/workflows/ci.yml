@@ -36,7 +36,7 @@ jobs:
         run: python tools/a11y_check.py
 
       - name: Run unit tests
-        run: pytest -q
+        run: PYTHONPATH=. pytest -q
 
   pa11y:
     runs-on: ubuntu-latest
