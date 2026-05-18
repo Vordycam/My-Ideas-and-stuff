@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AEGIS UI — Browser Tests</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <style>body{padding:20px;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;color:#c8dde8;background:#061018} .result{padding:8px;margin:8px 0;border-radius:6px} .pass{background:#063; color:#cfc} .fail{background:#600;color:#f88}</style>
+</head>
+<body>
+  <h1>AEGIS UI — Quick Browser Tests</h1>
+  <div id="results"></div>
+
+  <div id="testArea" style="display:none">
+    <div class="filter-row"><button class="filter-chip">TEST</button></div>
+    <div id="testLiveFeed" class="live-feed"></div>
+    <div class="toast-stack"></div>
+  </div>
+
+  <script type="module">
+    import { toggleChip } from '/assets/modules/ui.js';
+    import { startFeed } from '/assets/modules/feed.js';
+    import { showToast } from '/assets/modules/toast.js';
+
+    const results = document.getElementById('results');
+    function pass(msg){ const el=document.createElement('div'); el.className='result pass'; el.textContent='PASS: '+msg; results.appendChild(el); }
+    function fail(msg){ const el=document.createElement('div'); el.className='result fail'; el.textContent='FAIL: '+msg; results.appendChild(el); }
+
+    // Test 1: toggleChip adds active
+    (function(){
+      const btn = document.querySelector('.filter-chip');
+      if(!btn){ fail('filter chip not found'); return; }
+      toggleChip(btn);
+      if(btn.classList.contains('active')) pass('toggleChip sets active'); else fail('toggleChip did not set active');
+    })();
+
+    // Test 2: startFeed populates live feed
+    (function(){
+      startFeed('testLiveFeed');
+      setTimeout(()=>{
+        const feed = document.getElementById('testLiveFeed');
+        if(feed && feed.children.length > 0) pass('startFeed added items to live feed'); else fail('startFeed did not add items');
+      }, 600);
+    })();
+
+    // Test 3: showToast creates a toast
+    (function(){
+      setTimeout(()=>{
+        showToast(0);
+        const stack = document.querySelector('.toast-stack');
+        if(stack && stack.children.length > 0) pass('showToast added a toast'); else fail('showToast did not add a toast');
+      }, 300);
+    })();
+
+  </script>
+</body>
+</html>

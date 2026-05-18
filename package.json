@@ -1,0 +1,11 @@
+{
+  "name": "aegis-ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+  "check:html": "python tools/check_html.py",
+  "check:a11y": "python tools/a11y_check.py",
+  "start": "python -m http.server 8000",
+  "test:browser": "python -m http.server 8000"
+  }
+}
