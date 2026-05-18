@@ -28,11 +28,14 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/my-ideas-and-stuff-server:latest
 
-      - name: Set up gcloud
-        uses: google-github-actions/setup-gcloud@v1
+      - name: Authenticate to GCP (OIDC or service account key)
+        uses: 'google-github-actions/auth@v1'
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          project_id: ${{ secrets.GCP_PROJECT }}
+          # Prefer workload identity provider (no long-lived key in repo)
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          workload_identity_service_account: ${{ secrets.GCP_SA_EMAIL }}
+          # Fallback: if you have a service account key secret, the action will use it
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Configure Docker auth for GCR (optional)
         run: gcloud auth configure-docker --quiet
@@ -40,7 +43,8 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           IMAGE=ghcr.io/${{ github.repository_owner }}/my-ideas-and-stuff-server:latest
-          gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE }} \
+          echo "Deploying $IMAGE to Cloud Run service '${{ secrets.CLOUD_RUN_SERVICE }}' in region '${{ secrets.GCP_REGION }}'"
+          gcloud run deploy "${{ secrets.CLOUD_RUN_SERVICE }}" \
             --image "$IMAGE" \
             --region "${{ secrets.GCP_REGION }}" \
             --platform managed \
