@@ -90,6 +90,11 @@ def webhook():
     return jsonify({'status': 'success'})
 
 
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'ok'}), 200
+
+
 if __name__ == '__main__':
     # Ensure DB exists
     if not os.path.exists(DB_PATH):
